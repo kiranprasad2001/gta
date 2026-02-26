@@ -553,7 +553,7 @@ export default function LiveMap() {
   const currentZoom = view.zoom;
   // Stabilize center to avoid continuous re-fetching (view.center is a new array ref on every pan)
   const centerKey = useMemo(() => {
-    if (!view.center) return "";
+    if (!view.center) { return ""; }
     const [lon, lat] = toLonLat(view.center as number[]);
     // Round to ~100m precision to avoid thrashing
     return `${lat.toFixed(3)},${lon.toFixed(3)}`;
@@ -564,7 +564,7 @@ export default function LiveMap() {
       setStopFeatures([]);
       return;
     }
-    if (!centerKey) return;
+    if (!centerKey) { return; }
     const [latStr, lonStr] = centerKey.split(",");
     const cLat = Number(latStr);
     const cLon = Number(lonStr);

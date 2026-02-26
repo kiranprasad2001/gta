@@ -1,0 +1,1 @@
+function i(e){const n=/^([\w\s]+)\s*-\s*(\d[\w]+\s)*([/\w\s-]+)$/,s=/\w+-/i;if(n.test(e)){const t=e.match(n);if(t)return{prefix:t[1].trim(),name:t[3].trim()}}return{name:e.replace(s,"")}}export{i as p};

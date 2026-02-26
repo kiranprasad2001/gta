@@ -30,7 +30,7 @@ if (container) {
 // Throttle localStorage writes to avoid blocking the main thread on rapid dispatches
 let saveScheduled = false;
 store.subscribe(() => {
-  if (saveScheduled) return;
+  if (saveScheduled) { return; }
   saveScheduled = true;
   setTimeout(() => {
     saveScheduled = false;

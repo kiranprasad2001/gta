@@ -23,7 +23,7 @@ function App() {
   const resizeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleResize = useCallback(() => {
-    if (resizeTimer.current) clearTimeout(resizeTimer.current);
+    if (resizeTimer.current) { clearTimeout(resizeTimer.current); }
     resizeTimer.current = setTimeout(() => {
       setWidth(window.innerWidth);
     }, 150);
@@ -35,7 +35,7 @@ function App() {
     return () => {
       window.removeEventListener("resize", handleResize, false);
       window.removeEventListener("orientationchange", handleResize, false);
-      if (resizeTimer.current) clearTimeout(resizeTimer.current);
+      if (resizeTimer.current) { clearTimeout(resizeTimer.current); }
     };
   }, [handleResize]);
 

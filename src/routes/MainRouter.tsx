@@ -2,23 +2,36 @@ import { lazy } from "react";
 import { createBrowserRouter } from "react-router";
 
 import App from "../App.js";
-import TtcAlertList from "../components/alerts/AlertsPage.js";
-import { BookmarkPage } from "../components/bookmarks/Bookmark.js";
-import Nearby from "../components/nearby/Nearby.js";
-import { Settings } from "../components/settings/Settings.js";
-import YRTHeader from "../components/yrt/YRTheader.js";
-import YRTLine from "../components/yrt/YRTline.js";
-import YRTLines from "../components/yrt/YRTlines.js";
-import YRTStop from "../components/yrt/YRTstop.js";
-import About from "./About.js";
 import ErrorPage from "./Error.js";
 import Home from "./Home.js";
-import Line from "./Line.js";
-import LineSearch from "./LineSearch.js";
-import LineStopPrediction from "./LineStopPrediction.js";
-import RelativeVehiclePosition from "./RelativeVehiclePosition.js";
-import StopPrediction from "./StopPrediction.js";
 
+// Lazy-load all page components to reduce initial bundle size
+const TtcAlertList = lazy(() => import("../components/alerts/AlertsPage.js"));
+const BookmarkPage = lazy(
+  () =>
+    import("../components/bookmarks/Bookmark.js").then((m) => ({
+      default: m.BookmarkPage,
+    }))
+);
+const Nearby = lazy(() => import("../components/nearby/Nearby.js"));
+const Settings = lazy(
+  () =>
+    import("../components/settings/Settings.js").then((m) => ({
+      default: m.Settings,
+    }))
+);
+const YRTHeader = lazy(() => import("../components/yrt/YRTheader.js"));
+const YRTLine = lazy(() => import("../components/yrt/YRTline.js"));
+const YRTLines = lazy(() => import("../components/yrt/YRTlines.js"));
+const YRTStop = lazy(() => import("../components/yrt/YRTstop.js"));
+const About = lazy(() => import("./About.js"));
+const Line = lazy(() => import("./Line.js"));
+const LineSearch = lazy(() => import("./LineSearch.js"));
+const LineStopPrediction = lazy(() => import("./LineStopPrediction.js"));
+const RelativeVehiclePosition = lazy(
+  () => import("./RelativeVehiclePosition.js")
+);
+const StopPrediction = lazy(() => import("./StopPrediction.js"));
 const LiveMap = lazy(() => import("../components/map/LiveMap.js"));
 const Legacy = lazy(() => import("./Legacy.js"));
 

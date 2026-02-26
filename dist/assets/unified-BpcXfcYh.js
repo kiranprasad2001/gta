@@ -1,0 +1,1 @@
+const F={ttc:{label:"TTC",color:"#DA291C",bgColor:"#DA291C"},go:{label:"GO",color:"#FFFFFF",bgColor:"#00853F"},yrt:{label:"YRT",color:"#FFFFFF",bgColor:"#006837"},miway:{label:"MiWay",color:"#FFFFFF",bgColor:"#F47920"},brampton:{label:"Brampton",color:"#FFFFFF",bgColor:"#0071BC"}};export{F as A};
