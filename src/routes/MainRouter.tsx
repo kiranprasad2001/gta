@@ -7,18 +7,16 @@ import Home from "./Home.js";
 
 // Lazy-load all page components to reduce initial bundle size
 const TtcAlertList = lazy(() => import("../components/alerts/AlertsPage.js"));
-const BookmarkPage = lazy(
-  () =>
-    import("../components/bookmarks/Bookmark.js").then((m) => ({
-      default: m.BookmarkPage,
-    }))
+const BookmarkPage = lazy(() =>
+  import("../components/bookmarks/Bookmark.js").then((m) => ({
+    default: m.BookmarkPage,
+  }))
 );
 const Nearby = lazy(() => import("../components/nearby/Nearby.js"));
-const Settings = lazy(
-  () =>
-    import("../components/settings/Settings.js").then((m) => ({
-      default: m.Settings,
-    }))
+const Settings = lazy(() =>
+  import("../components/settings/Settings.js").then((m) => ({
+    default: m.Settings,
+  }))
 );
 const YRTHeader = lazy(() => import("../components/yrt/YRTheader.js"));
 const YRTLine = lazy(() => import("../components/yrt/YRTline.js"));
