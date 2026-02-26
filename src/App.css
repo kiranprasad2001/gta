@@ -23,7 +23,7 @@ a {
   display: flex;
   flex-direction: column;
 
-  > a {
+  >a {
     padding: 0 32px;
   }
 }
@@ -48,8 +48,16 @@ a {
   gap: 12px;
 }
 
+.map-home {
+  width: 100%;
+  height: calc(100vh - 48px);
+  margin: 0;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
 .about-page {
-  > * {
+  >* {
     padding-bottom: 16px;
   }
 
@@ -169,7 +177,8 @@ pre {
   margin-bottom: 16px;
 }
 
-@media (width >= 800px) {
+@media (width >=800px) {
+
   .line-page,
   .home-page,
   .container.yrt,
@@ -179,17 +188,20 @@ pre {
 
   .container {
     flex-direction: row;
+
     .nav-bar {
       width: fit-content;
       background-color: var(--colorNeutralBackground2);
     }
+
     main {
       margin: 16px 32px 80px;
     }
   }
 }
 
-@media (width <= 800px) {
+@media (width <=800px) {
+
   .bookmark-container ul,
   .route-list {
     grid-template-columns: auto;

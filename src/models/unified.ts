@@ -1,11 +1,11 @@
 /**
  * Unified GTA Transit Models
- * 
+ *
  * This file provides a unified data layer for all transit agencies in the GTA.
  * It re-exports and extends the base types from transit.ts.
  */
 
-import type { AgencyID, ArrivalPrediction, TransitStop } from './transit.js';
+import type { AgencyID, ArrivalPrediction, TransitStop } from "./transit.js";
 
 // Re-export base types for convenience
 export type { AgencyID, ArrivalPrediction, TransitStop };
@@ -50,14 +50,17 @@ export function isAgency(stop: UnifiedStop, agency: AgencyID): boolean {
 /**
  * Agency display configuration
  */
-export const AGENCY_CONFIG: Record<AgencyID, { 
-  label: string; 
-  color: string; 
-  bgColor: string;
-}> = {
-  ttc: { label: 'TTC', color: '#DA291C', bgColor: '#DA291C' },
-  go: { label: 'GO', color: '#FFFFFF', bgColor: '#00853F' },
-  yrt: { label: 'YRT', color: '#FFFFFF', bgColor: '#006837' },
-  miway: { label: 'MiWay', color: '#FFFFFF', bgColor: '#F47920' },
-  brampton: { label: 'Brampton', color: '#FFFFFF', bgColor: '#0071BC' },
+export const AGENCY_CONFIG: Record<
+  AgencyID,
+  {
+    label: string;
+    color: string;
+    bgColor: string;
+  }
+> = {
+  ttc: { label: "TTC", color: "#DA291C", bgColor: "#DA291C" },
+  go: { label: "GO", color: "#FFFFFF", bgColor: "#00853F" },
+  yrt: { label: "YRT", color: "#FFFFFF", bgColor: "#006837" },
+  miway: { label: "MiWay", color: "#FFFFFF", bgColor: "#F47920" },
+  brampton: { label: "Brampton", color: "#FFFFFF", bgColor: "#0071BC" },
 };

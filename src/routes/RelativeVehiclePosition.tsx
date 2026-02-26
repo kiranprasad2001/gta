@@ -19,7 +19,7 @@ export default function RelativeVehiclePosition() {
   const [lastUpdatedAt, setLastUpdatedAt] = useState<number>(Date.now());
 
   useEffect(() => {
-    document.title = `Stop ID ${stopNum} | TO bus`;
+    document.title = `Stop ID ${stopNum} | GTT`;
   });
 
   const ttcVehicleLocationResponse = useQuery({

@@ -1,0 +1,398 @@
+/* Basic styles */
+body {
+    font-family: sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background-color: #f0f0f0;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 10px 20px;
+    color: white;
+}
+
+.logo-image {
+    height: 20px;
+    width: auto;
+    /* Maintain aspect ratio */
+}
+
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.header-links {
+    display: flex;
+    gap: 15px;
+}
+
+.header-links a {
+    text-decoration: none;
+    color: #333;
+    font-family: sans-serif;
+}
+
+/* Make sure the grids have proper structure */
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-item {
+    position: relative;
+    /* To position the background image */
+    border: 1px solid #ccc;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    /* Make grid-item a flex container */
+    align-items: center;
+    /* Vertically align items */
+}
+
+.grid-item svg {
+    /* Target the SVG directly */
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 24px;
+    height: 24px;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -1;
+    /* Places the background image behind the content */
+    opacity: 0.2
+}
+
+.content {
+    position: relative;
+    /* Ensures content is positioned relative to the grid item */
+    z-index: 1;
+    /* Places the content above the background image */
+    /* ... other styles for the content ... */
+}
+
+.compact-grid-item {
+    font-size: 14px;
+    /* Reduce font size */
+    padding: 10px;
+    /* Reduce padding */
+    margin: 5px;
+    /* Reduce margin */
+}
+
+.grid-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* About page container */
+.about-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.about-container h2 {
+    margin-top: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.about-container ul {
+    list-style-type: disc;
+    margin: 10px 0 20px 20px;
+}
+
+.about-container p {
+    line-height: 1.6;
+    color: #555;
+}
+
+.about-container a {
+    color: #007acc;
+    text-decoration: none;
+}
+
+.about-container a:hover {
+    text-decoration: underline;
+}
+
+/* Footer styles */
+footer {
+    background-color: #f0f0f0;
+    padding: 10px 20px;
+    border-top: 1px solid #ccc;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.left,
+.center,
+.right {
+    flex: 1;
+}
+
+.left {
+    text-align: left;
+}
+
+.center {
+    text-align: center;
+}
+
+.right {
+    text-align: right;
+}
+
+/* Responsive layout */
+@media (max-width: 600px) {
+    .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        /* Minimum width of 150px */
+        gap: 15px;
+        /* Spacing between grid items */
+        padding: 15px;
+        /* Padding around the grid */
+    }
+
+    .logo-image {
+        height: 50px;
+        /* Reduces the height for smaller screens */
+    }
+
+    .container {
+        grid-template-columns: repeat(2, 1fr);
+        /* Ensures 2 items per row */
+    }
+
+    #search-box {
+        width: 95%;
+    }
+
+    .header-links {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .search-container #search-box {
+        width: 95%;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .left,
+    .center,
+    .right {
+        text-align: center;
+        flex: none;
+    }
+}
+
+/* Hover Effects for Footer Links */
+.footer-content a {
+    text-decoration: none;
+    color: #007acc;
+    transition: color 0.3s ease;
+}
+
+.footer-content a:hover {
+    color: #005f99;
+}
+
+/* Add margin or padding to ensure spacing between grids */
+.category-container {
+    margin-bottom: 30px;
+    /* Adds space between grid categories */
+}
+
+.category-container h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+}
+
+/* Google-style Search Container */
+.search-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 150px;
+    /* Adjust height as needed */
+    background-color: #f9f9f9;
+    /* Example background color */
+    padding: 20px;
+}
+
+.search-container #search-box {
+    width: 80%;
+    /* Adjust width as needed */
+    max-width: 600px;
+    padding: 12px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 24px;
+    /* Google-style rounded corners */
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    /* Add space between search box and link */
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #333;
+    color: #eee;
+}
+
+body.dark-mode header {
+    background-color: #222;
+    border-bottom-color: #555;
+}
+
+body.dark-mode .logo {
+    color: #eee;
+}
+
+body.dark-mode .header-links a {
+    color: #eee;
+}
+
+body.dark-mode .search-container {
+    background-color: #292929;
+}
+
+body.dark-mode .search-container #search-box {
+    background-color: #1f1f1f;
+    border-color: #555;
+    color: #eee;
+}
+
+body.dark-mode .grid-item {
+    background-color: #444;
+    color: #eee;
+    border-color: #555;
+}
+
+body.dark-mode .grid-item:hover {
+    background-color: #555;
+}
+
+body.dark-mode footer {
+    background-color: #222;
+    border-top-color: #555;
+}
+
+body.dark-mode .footer-content a {
+    color: #eee;
+}
+
+body.dark-mode .footer-content a:hover {
+    color: #fff;
+}
+
+.how-it-works {
+    display: inline-block;
+    background-color: #eee;
+    /* Example background color */
+    color: #333;
+    padding: 8px 12px;
+    border-radius: 5px;
+    margin-top: 10px;
+    /* Adjust as needed */
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.icon-container {
+    display: flex;
+    gap: 8px;
+    /* Space between icons */
+    margin-bottom: 8px;
+    /* Space between icons and text content */
+    align-items: center;
+    /* Vertically align icons */
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}

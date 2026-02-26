@@ -8,12 +8,14 @@
       "settings": "Settings",
       "bookmarks": "Bookmarks",
       "nearby": "Nearby",
-      "serviceAlerts": "Service Alerts"
+      "serviceAlerts": "Service Alerts",
+      "map": "Map",
+      "legacy": "Legacy"
     }
   },
   "home": {
     "title": {
-      "name": "TO bus",
+      "name": "GTT",
       "tooltip": "Return home"
     },
     "headline": "You'll see saved stops here.",
@@ -27,7 +29,7 @@
   "lines": {
     "ariaLabel": "enter a line number",
     "placeholder": "enter a line number",
-    "browserTitle": "Line {{lineNum}} | TO bus",
+    "browserTitle": "Line {{lineNum}} | GTT",
     "title": "Enter a line number:",
     "number": "Line {{lineNum}}",
     "lineAndStopInfo": "Line {{lineNum}} Stop {{stopNum}} =",
@@ -98,5 +100,12 @@
     "en": "English",
     "fr": "français",
     "zh": "中文"
+  },
+  "map": {
+    "vehicleCount": "{{count}} live vehicles",
+    "legend": {
+      "title": "Agencies"
+    },
+    "showRoute": "Show Full Route"
   }
 }

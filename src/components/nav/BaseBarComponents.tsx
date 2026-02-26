@@ -4,8 +4,14 @@ import {
   ArrowFlowUpRight24Filled,
   Home20Regular,
   Home24Filled,
+  Location20Regular,
+  Location24Filled,
   Settings20Regular,
   Settings24Filled,
+  Warning20Regular,
+  Warning24Filled,
+  History20Regular,
+  History24Filled,
 } from "@fluentui/react-icons";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -28,6 +34,18 @@ const navItems: NavItem[] = [
     iconActive: <Home24Filled />,
   },
   {
+    label: "nav.label.nearby",
+    path: "/nearby",
+    icon: <Location20Regular />,
+    iconActive: <Location24Filled />,
+  },
+  {
+    label: "nav.label.serviceAlerts",
+    path: "/alerts",
+    icon: <Warning20Regular />,
+    iconActive: <Warning24Filled />,
+  },
+  {
     label: "nav.label.lines",
     path: "/lines",
     icon: <ArrowFlowUpRight20Regular />,
@@ -38,6 +56,12 @@ const navItems: NavItem[] = [
     path: "/settings",
     icon: <Settings20Regular />,
     iconActive: <Settings24Filled />,
+  },
+  {
+    label: "nav.label.legacy",
+    path: "/legacy",
+    icon: <History20Regular />,
+    iconActive: <History24Filled />,
   },
 ];
 

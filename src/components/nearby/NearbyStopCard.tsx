@@ -1,8 +1,5 @@
-import { Card, CardHeader, Badge } from "@fluentui/react-components";
-import {
-  LocationLive20Regular,
-  Warning20Regular,
-} from "@fluentui/react-icons";
+import { Badge, Card, CardHeader } from "@fluentui/react-components";
+import { LocationLive20Regular, Warning20Regular } from "@fluentui/react-icons";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
@@ -27,19 +24,19 @@ interface NearbyStopCardProps {
 /**
  * Agency badge component showing the transit agency
  */
-function AgencyBadge({ agency }: { agency: UnifiedStop['agency'] }) {
-  const config = AGENCY_CONFIG[agency];
+function AgencyBadge({ agency }: { agency: UnifiedStop["agency"] }) {
+  const config = AGENCY_CONFIG[agency] || AGENCY_CONFIG["ttc"];
 
   return (
     <Badge
       appearance="filled"
       style={{
-        backgroundColor: config.bgColor,
-        color: config.color,
-        marginRight: '0.5rem',
+        backgroundColor: config?.bgColor ?? "#DA291C",
+        color: config?.color ?? "#FFFFFF",
+        marginRight: "0.5rem",
       }}
     >
-      {config.label}
+      {config?.label ?? "TTC"}
     </Badge>
   );
 }
@@ -50,7 +47,10 @@ function AgencyBadge({ agency }: { agency: UnifiedStop['agency'] }) {
 function ArrivalStatusIcon({ isGhost }: { isGhost: boolean }) {
   if (isGhost) {
     return (
-      <span title="Scheduled only (not live tracked)" className={style.ghostIcon}>
+      <span
+        title="Scheduled only (not live tracked)"
+        className={style.ghostIcon}
+      >
         <Warning20Regular />
       </span>
     );
@@ -79,7 +79,7 @@ function ArrivalRow({ arrival }: { arrival: ArrivalPrediction }) {
 
 /**
  * NearbyStopCard - Unified card for displaying nearby stops from any GTA transit agency
- * 
+ *
  * Features:
  * - Agency badge (TTC red, GO green, etc.)
  * - Ghost icon (⚠️) for scheduled-only arrivals
@@ -95,9 +95,10 @@ export default function NearbyStopCard({ stop }: NearbyStopCardProps) {
   const displayName = stop.title || stop.name;
 
   // Build URL based on agency
-  const stopUrl = stop.agency === 'ttc'
-    ? `/stops/${stop.code}`
-    : `/${stop.agency}/stops/${stop.code}`;
+  const stopUrl =
+    stop.agency === "ttc"
+      ? `/stops/${stop.code}`
+      : `/${stop.agency}/stops/${stop.code}`;
 
   return (
     <li className={style.nearbyCard}>
@@ -108,9 +109,7 @@ export default function NearbyStopCard({ stop }: NearbyStopCardProps) {
               <div className={style.headerContent}>
                 <div className={style.agencyAndName}>
                   <AgencyBadge agency={stop.agency} />
-                  <span className={style.stopName}>
-                    {displayName}
-                  </span>
+                  <span className={style.stopName}>{displayName}</span>
                 </div>
                 <span className={style.distance}>
                   {t("nearby.mAway", { distanceInMetres })}
@@ -120,9 +119,7 @@ export default function NearbyStopCard({ stop }: NearbyStopCardProps) {
           />
 
           <div className={style.arrivals}>
-            {isLoading && (
-              <div className={style.loading}>Loading...</div>
-            )}
+            {isLoading && <div className={style.loading}>Loading...</div>}
 
             {!isLoading && arrivals && arrivals.length === 0 && (
               <div className={style.noArrivals}>No upcoming arrivals</div>
@@ -145,7 +142,9 @@ export default function NearbyStopCard({ stop }: NearbyStopCardProps) {
  * Legacy export for backward compatibility
  * Wraps the old StopWithDistance format
  */
-export function NearbyStopCardLegacy({ stop }: {
+export function NearbyStopCardLegacy({
+  stop,
+}: {
   stop: {
     id: string;
     title: string;
@@ -159,7 +158,7 @@ export function NearbyStopCardLegacy({ stop }: {
   const unifiedStop: UnifiedStop & { realDistance: number; title: string } = {
     id: stop.id,
     code: stop.id, // Legacy used id as code
-    agency: stop.type === 'ttc-subway' ? 'ttc' : 'ttc',
+    agency: stop.type === "ttc-subway" ? "ttc" : "ttc",
     name: stop.title,
     lat: 0, // Not available in legacy format
     lon: 0,

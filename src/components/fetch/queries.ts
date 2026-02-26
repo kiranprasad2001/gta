@@ -8,6 +8,7 @@ import type {
   RoutesJson,
   SubwayClosureJson,
 } from "../../models/etaJson.js";
+import type { ArrivalPrediction } from "../../models/transit.js";
 import type {
   BasicLine,
   NextBusBasic,
@@ -15,9 +16,12 @@ import type {
   SubwayStations,
   SubwayStop,
 } from "../../models/ttc.js";
-import type { ArrivalPrediction } from "../../models/transit.js";
 import type { UnifiedStop } from "../../models/unified.js";
-import { normalizeGoTransit, normalizeTtc, normalizeTtcSubway } from "./adapters.js";
+import {
+  normalizeGoTransit,
+  normalizeTtc,
+  normalizeTtcSubway,
+} from "./adapters.js";
 
 export const ttcStopPrediction = (stopId: number) =>
   queryOptions<EtaPredictionJson>({
@@ -33,6 +37,23 @@ export const ttcStopPrediction = (stopId: number) =>
       return response.json();
     },
     refetchInterval: 60 * 1000,
+    placeholderData: (prev) => prev,
+  });
+
+export const ttcSubwayPrediction = (stopCode: string) =>
+  queryOptions({
+    queryKey: [`ttc-subway-stop-${stopCode}`],
+    queryFn: async () => {
+      // Use our Cloudflare worker proxy to fetch the NTAS API data
+      const response = await fetch(
+        `http://localhost:8787/?agency=ttc-subway&stopCode=${stopCode}` // For dev. In prod it would point to the deployed worker.
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    },
+    refetchInterval: 30 * 1000, // Subway ETAs update slightly faster
     placeholderData: (prev) => prev,
   });
 
@@ -358,7 +379,9 @@ export const getYrtStops = queryOptions<
  * Cloudflare Worker URL for GTA transit proxy
  * TODO: Update this to your deployed worker URL
  */
-const GTA_PROXY_URL = import.meta.env.VITE_GTA_PROXY_URL || 'https://tobus.kiranprasad2001.workers.dev';
+const GTA_PROXY_URL =
+  import.meta.env.VITE_GTA_PROXY_URL ||
+  "https://tobus.kiranprasad2001.workers.dev";
 
 /**
  * GO Transit arrivals query
@@ -386,10 +409,10 @@ export const goTransitArrivals = (stopCode: string) =>
  */
 export const gtaArrivalsQuery = (stop: UnifiedStop) => {
   switch (stop.agency) {
-    case 'go':
+    case "go":
       return goTransitArrivals(stop.code);
 
-    case 'ttc':
+    case "ttc":
     default:
       // For TTC, use the existing stop prediction but normalize to ArrivalPrediction
       return queryOptions<ArrivalPrediction[]>({
@@ -416,7 +439,154 @@ export const gtaArrivalsQuery = (stop: UnifiedStop) => {
  */
 export function useGtaArrivals(stop: UnifiedStop | null) {
   return useQuery({
-    ...gtaArrivalsQuery(stop ?? { id: '', code: '', agency: 'ttc', name: '', lat: 0, lon: 0 }),
+    ...gtaArrivalsQuery(
+      stop ?? { id: "", code: "", agency: "ttc", name: "", lat: 0, lon: 0 }
+    ),
     enabled: !!stop,
   });
 }
+
+// ============================================
+// Live Map Queries
+// ============================================
+
+export interface VehiclePosition {
+  id: string;
+  routeTag: string;
+  lat: number;
+  lon: number;
+  heading: number;
+  speedKmHr: number;
+  secsSinceReport: number;
+}
+
+export interface RoutePathPoint {
+  lat: number;
+  lon: number;
+}
+
+export interface RouteWithPaths {
+  tag: string;
+  title: string;
+  color: string;
+  stops: Array<{ tag: string; title: string; lat: number; lon: number }>;
+  paths: RoutePathPoint[][];
+}
+
+/**
+ * Fetch ALL TTC vehicle positions from UmoIQ XML feed.
+ * Returns ~1,000 vehicles with lat/lng, heading, speed, route.
+ * Auto-refreshes every 15 seconds.
+ */
+export const ttcAllVehiclePositions = queryOptions<VehiclePosition[]>({
+  queryKey: ["ttc-all-vehicles"],
+  queryFn: async () => {
+    const response = await fetch(
+      "https://retro.umoiq.com/service/publicXMLFeed?command=vehicleLocations&a=ttc&t=0"
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const text = await response.text();
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(text, "text/xml");
+    const vehicleElements = xml.querySelectorAll("vehicle");
+    const vehicles: VehiclePosition[] = [];
+
+    for (const el of vehicleElements) {
+      const id = el.getAttribute("id");
+      const routeTag = el.getAttribute("routeTag");
+      const lat = el.getAttribute("lat");
+      const lon = el.getAttribute("lon");
+      const heading = el.getAttribute("heading");
+      const speedKmHr = el.getAttribute("speedKmHr");
+      const secsSinceReport = el.getAttribute("secsSinceReport");
+
+      if (id && routeTag && lat && lon) {
+        vehicles.push({
+          id,
+          routeTag,
+          lat: Number.parseFloat(lat),
+          lon: Number.parseFloat(lon),
+          heading: Number.parseInt(heading || "0", 10),
+          speedKmHr: Number.parseFloat(speedKmHr || "0"),
+          secsSinceReport: Number.parseInt(secsSinceReport || "0", 10),
+        });
+      }
+    }
+
+    return vehicles;
+  },
+  refetchInterval: 15 * 1000,
+  staleTime: 10 * 1000,
+});
+
+/**
+ * Fetch route config including path polyline data for drawing route overlays.
+ */
+export const ttcRouteWithPaths = (routeTag: string) =>
+  queryOptions<RouteWithPaths>({
+    queryKey: [`ttc-route-paths-${routeTag}`],
+    queryFn: async () => {
+      const response = await fetch(
+        `https://retro.umoiq.com/service/publicXMLFeed?command=routeConfig&a=ttc&r=${routeTag}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const text = await response.text();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(text, "text/xml");
+      const routeEl = xml.querySelector("route");
+
+      const tag = routeEl?.getAttribute("tag") || routeTag;
+      const title = routeEl?.getAttribute("title") || routeTag;
+      const color = routeEl?.getAttribute("color") || "666666";
+
+      // Parse stops
+      const stopEls = routeEl?.querySelectorAll("stop[lat]") || [];
+      const stopsMap = new Map<
+        string,
+        { tag: string; title: string; lat: number; lon: number }
+      >();
+      for (const s of stopEls) {
+        const sTag = s.getAttribute("tag") || "";
+        if (!stopsMap.has(sTag)) {
+          stopsMap.set(sTag, {
+            tag: sTag,
+            title: s.getAttribute("title") || "",
+            lat: Number.parseFloat(s.getAttribute("lat") || "0"),
+            lon: Number.parseFloat(s.getAttribute("lon") || "0"),
+          });
+        }
+      }
+
+      // Parse paths
+      const pathEls = xml.querySelectorAll("path");
+      const paths: RoutePathPoint[][] = [];
+      for (const p of pathEls) {
+        const points: RoutePathPoint[] = [];
+        const pointEls = p.querySelectorAll("point");
+        for (const pt of pointEls) {
+          points.push({
+            lat: Number.parseFloat(pt.getAttribute("lat") || "0"),
+            lon: Number.parseFloat(pt.getAttribute("lon") || "0"),
+          });
+        }
+        if (points.length > 0) {
+          paths.push(points);
+        }
+      }
+
+      return {
+        tag,
+        title,
+        color: `#${color}`,
+        stops: Array.from(stopsMap.values()),
+        paths,
+      };
+    },
+    staleTime: 24 * 60 * 60 * 1000,
+  });

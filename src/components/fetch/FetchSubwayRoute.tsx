@@ -21,7 +21,11 @@ const filterSubwayDirection = (input: string) => {
 };
 
 const filterSubwayTitle = (input: string) => {
-  return `${input.split(/\(|\)/)[1].toLowerCase()} Line`;
+  const parts = input.split(/\(|\)/);
+  if (parts.length > 1) {
+    return `${parts[1].toLowerCase()} Line`;
+  }
+  return input;
 };
 
 const line3Tribute = () => {

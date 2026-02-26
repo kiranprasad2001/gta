@@ -1,7 +1,10 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router";
 
 import App from "../App.js";
+import TtcAlertList from "../components/alerts/AlertsPage.js";
 import { BookmarkPage } from "../components/bookmarks/Bookmark.js";
+import Nearby from "../components/nearby/Nearby.js";
 import { Settings } from "../components/settings/Settings.js";
 import YRTHeader from "../components/yrt/YRTheader.js";
 import YRTLine from "../components/yrt/YRTline.js";
@@ -15,6 +18,9 @@ import LineSearch from "./LineSearch.js";
 import LineStopPrediction from "./LineStopPrediction.js";
 import RelativeVehiclePosition from "./RelativeVehiclePosition.js";
 import StopPrediction from "./StopPrediction.js";
+
+const LiveMap = lazy(() => import("../components/map/LiveMap.js"));
+const Legacy = lazy(() => import("./Legacy.js"));
 
 const ttcPages = [
   {
@@ -64,6 +70,8 @@ export const router = createBrowserRouter([
       { index: true, Component: Home },
       { path: "about", Component: About },
       { path: "bookmarks", Component: BookmarkPage },
+      { path: "nearby", Component: Nearby },
+      { path: "alerts", Component: TtcAlertList },
       { path: "settings", Component: Settings },
       {
         path: "yrt",
@@ -84,6 +92,8 @@ export const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       ...ttcPages,
+      { path: "map", Component: LiveMap },
+      { path: "legacy", Component: Legacy },
       { path: "*", Component: ErrorPage },
     ],
   },
