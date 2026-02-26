@@ -640,6 +640,27 @@ export default function LiveMap() {
     setShowRoute(true);
   }, []);
 
+  const handleLocateMe = useCallback(() => {
+    if (userLocation) {
+      setView({
+        center: fromLonLat([userLocation.lon, userLocation.lat]),
+        zoom: 15,
+      });
+    } else if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const loc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+          setUserLocation(loc);
+          setView({
+            center: fromLonLat([loc.lon, loc.lat]),
+            zoom: 15,
+          });
+        },
+        () => {}
+      );
+    }
+  }, [userLocation]);
+
   // === Computed ===
   const filteredFeatures = useMemo(() => {
     if (!vehicles) {
@@ -854,6 +875,16 @@ export default function LiveMap() {
       {currentZoom < 14 && stopsLoaded && (
         <div className={styles.zoomHint}>Zoom in to see transit stops</div>
       )}
+
+      <button
+        type="button"
+        className={styles.locateMeBtn}
+        onClick={handleLocateMe}
+        title="Go to my location"
+        aria-label="Go to my location"
+      >
+        ⊕
+      </button>
     </div>
   );
 }

@@ -73,7 +73,7 @@ export function BaseBarComponents({ width }: { width: number }) {
     switch (true) {
       case width >= 800:
         return fluentStyle.sideNavButton;
-      case width >= 360:
+      case width >= 600:
         return fluentStyle.bottomNavButton;
       default:
         return fluentStyle.smallRoundNavButton;
@@ -97,7 +97,7 @@ export function BaseBarComponents({ width }: { width: number }) {
               size={width >= 360 ? "medium" : "large"}
               title={t(item.label) ?? item.label}
             >
-              {width >= 360 && <Text>{t(item.label)}</Text>}
+              {width >= 600 && <Text>{t(item.label)}</Text>}
             </Button>
           )}
         </NavLink>

@@ -207,5 +207,15 @@ pre {
 
   main {
     margin-bottom: 80px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .nav-bar {
+    padding: 8px 8px 0 0;
+
+    > a {
+      padding: 0 16px;
+    }
   }
 }

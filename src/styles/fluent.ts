@@ -12,8 +12,15 @@ export const fluentStyles = makeStyles({
     flexDirection: "column",
     marginLeft: "auto",
     marginRight: "auto",
+    width: "100%",
+    minWidth: "0px",
+    overflow: "hidden",
     "& span": {
       marginRight: "0px",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+      maxWidth: "100%",
     },
   },
   navButtonLink: {
