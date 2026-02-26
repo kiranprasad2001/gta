@@ -197,7 +197,9 @@ export async function getStop(
   const db = await getDb();
   const stop = await db.get("stops", id);
 
-  if (!stop) return undefined;
+  if (!stop) {
+    return undefined;
+  }
 
   return {
     id: stop.id,

@@ -23,7 +23,7 @@ a {
   display: flex;
   flex-direction: column;
 
-  >a {
+  > a {
     padding: 0 32px;
   }
 }
@@ -57,7 +57,7 @@ a {
 }
 
 .about-page {
-  >* {
+  > * {
     padding-bottom: 16px;
   }
 
@@ -177,8 +177,7 @@ pre {
   margin-bottom: 16px;
 }
 
-@media (width >=800px) {
-
+@media (width >= 800px) {
   .line-page,
   .home-page,
   .container.yrt,
@@ -200,8 +199,7 @@ pre {
   }
 }
 
-@media (width <=800px) {
-
+@media (width <= 800px) {
   .bookmark-container ul,
   .route-list {
     grid-template-columns: auto;

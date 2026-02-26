@@ -124,7 +124,7 @@ async function fetchTtcSubway(stopCode) {
     const response = await fetch(url, {
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; GTATransitProxy/1.0)",
-        "Accept": "application/json",
+        Accept: "application/json",
       },
     });
 
@@ -169,7 +169,7 @@ async function fetchTtcSubway(stopCode) {
  * Main request handler
  */
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env, _ctx) {
     // Handle CORS preflight
     if (request.method === "OPTIONS") {
       return handleOptions(request);

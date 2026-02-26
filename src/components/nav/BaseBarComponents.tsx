@@ -2,6 +2,8 @@ import { Button, Text } from "@fluentui/react-components";
 import {
   ArrowFlowUpRight20Regular,
   ArrowFlowUpRight24Filled,
+  History20Regular,
+  History24Filled,
   Home20Regular,
   Home24Filled,
   Location20Regular,
@@ -10,8 +12,6 @@ import {
   Settings24Filled,
   Warning20Regular,
   Warning24Filled,
-  History20Regular,
-  History24Filled,
 } from "@fluentui/react-icons";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";

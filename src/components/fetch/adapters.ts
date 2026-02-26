@@ -81,14 +81,18 @@ export function normalizeTtc(json: EtaPredictionJson): ArrivalPrediction[] {
     : [json.predictions];
 
   for (const pred of predictionsArray) {
-    if (!pred.direction) continue;
+    if (!pred.direction) {
+      continue;
+    }
 
     const directions = Array.isArray(pred.direction)
       ? pred.direction
       : [pred.direction];
 
     for (const dir of directions) {
-      if (!dir.prediction) continue;
+      if (!dir.prediction) {
+        continue;
+      }
 
       const etas = Array.isArray(dir.prediction)
         ? dir.prediction
@@ -131,7 +135,9 @@ export function normalizeTtcSubway(
   const predictions: ArrivalPrediction[] = [];
 
   for (const item of response) {
-    if (!item.nextTrains) continue;
+    if (!item.nextTrains) {
+      continue;
+    }
 
     // Parse the nextTrains string (format: "3, 7, 12" minutes)
     const times = item.nextTrains
@@ -139,7 +145,9 @@ export function normalizeTtcSubway(
       .map((t) => Number.parseInt(t.trim(), 10));
 
     for (const timeMinutes of times) {
-      if (isNaN(timeMinutes)) continue;
+      if (Number.isNaN(timeMinutes)) {
+        continue;
+      }
 
       predictions.push({
         line: item.line ? `Line ${item.line}` : "Subway",

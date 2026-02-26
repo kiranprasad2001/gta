@@ -31,7 +31,7 @@
     "build": "vite build",
     "build:cd": "vite build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d dist",
     "format": "biome check --write .",
     "format:ci": "biome ci",
     "prebuild": "npm run format:ci",

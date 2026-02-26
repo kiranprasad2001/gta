@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TTC Message Sender</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="favicon/favicon.ico" type="image/x-icon"> 
+  <meta name="google-site-verification" content="iDxk7n__yLKWWkm3J4QZelGbn42cUaP04319UvqVUEQ" />
+  <meta name="description" content="Get real-time updates on TTC stops. Send a quick message to find out arrival times.">
+  <meta name="author" content="Kiran Prasad"> 
+  <meta name="keywords" content="TTC, Toronto Transit Commission, transit, bus, streetcar, subway, stops, real-time, updates, TXTTTC, TTC message, TTC message send, TTC, Toronto Transit, Toronto, TTC stops, TTC routes, TTC directions, TTC search, TTC SMS, TTC SMS service, TTC SMS message, TTC SMS send, TTC SMS send message, TTC SMS service, TTC SMS service message, TTC SMS service send, TTC SMS service send message, TTC SMS service send message stops, TTC SMS service send message routes, TTC SMS service send message directions, TTC SMS service send message search, TTC SMS service send message SMS, TTC SMS service send message service, TTC SMS service send message TTC, TTC SMS service send message stops, TTC SMS service send message routes, TTC SMS service send message directions, TTC SMS service send message search, TTC SMS service send message SMS, TTC SMS service send message service, TTC SMS service send message TTC">
+  <meta name="robots" content="index, follow">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+  <meta name="theme-color" content="#ffffff"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preload" href="assets/ttc_streetcar.webp" as="image">
+  <link rel="preload" href="assets/ttc_bus.webp" as="image">
+  <link rel="preload" href="assets/ttc_all.webp" as="image">
+  <link rel="manifest" href="manifest.json">
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RF4MCV7JG9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-RF4MCV7JG9');
+</script>
+<body>
+  <header>
+    <div class="header-container">
+      <div>
+        <a href="index.html" class="logo-link">
+          <img src="assets/icon-96x96.png" alt= "Spotrot Logo" class="logo-image"> 
+        </a>
+      </div>
+      <div class="header-links">
+        <a href="https://github.com/kiranprasad2001/ttc" target="_blank">Contribute</a>
+        <a href="about.html">About</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <main>
+      <div class="search-container">
+        <input type="text" id="search-box" placeholder="Search for TTC stops, Routes...">
+        <div class="how-it-works" id="how-it-works">How it works</div>
+      </div>
+      <div class="container" id="grid-container"></div>
+      <div id="howItWorksModal" class="modal">
+        <div class="modal-content">
+          <span class="close-button" id="closeModal">&times;</span>
+          <h2>How It Works</h2>
+          <p>This web app helps you get real-time information about TTC stops.</p>
+          <ol>
+            <li>Search for a stop by its name, Route or direction or browse nearby stops.</li>
+            <li>Click on a stop to send a pre-formatted message to the TTC's SMS service.</li>
+            <li>You'll receive a text message with the next arrival times for that stop.</li>
+          </ol>
+          <p>It's that simple!</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="left">
+        &copy; KP (<a href="https://links.spotrot.com">links.spotrot.com</a>)
+      </div>
+      <div class="center">
+        Not an official app. Official website: <a href="https://ttc.ca">ttc.ca</a>
+      </div>
+      <div class="right">
+        Official news: <a href="https://ttc.ca/news">ttc.ca/news</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script/script.js"></script>
+</body>
+</html>

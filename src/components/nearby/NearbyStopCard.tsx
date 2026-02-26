@@ -25,7 +25,7 @@ interface NearbyStopCardProps {
  * Agency badge component showing the transit agency
  */
 function AgencyBadge({ agency }: { agency: UnifiedStop["agency"] }) {
-  const config = AGENCY_CONFIG[agency] || AGENCY_CONFIG["ttc"];
+  const config = AGENCY_CONFIG[agency] || AGENCY_CONFIG.ttc;
 
   return (
     <Badge

@@ -9,7 +9,11 @@ const LiveMap = lazy(() => import("../components/map/LiveMap.js"));
 export default function Home() {
   return (
     <main className="map-home">
-      <Suspense fallback={<div style={{ padding: "2rem", color: "#888" }}>Loading map...</div>}>
+      <Suspense
+        fallback={
+          <div style={{ padding: "2rem", color: "#888" }}>Loading map...</div>
+        }
+      >
         <LiveMap />
       </Suspense>
     </main>

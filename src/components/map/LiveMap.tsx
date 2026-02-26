@@ -14,10 +14,8 @@ import {
 import { useTranslation } from "react-i18next";
 import { RFeature, RLayerTile, RLayerVector, RMap } from "rlayers";
 import type { RView } from "rlayers/RMap";
-
-import { AGENCY_CONFIG } from "../../models/unified.js";
 import type { AgencyID } from "../../models/unified.js";
-import { etaParser } from "../parser/etaParser.js";
+import { AGENCY_CONFIG } from "../../models/unified.js";
 import {
   addStops,
   getSize,
@@ -29,6 +27,7 @@ import {
   ttcSubwayPrediction,
   type VehiclePosition,
 } from "../fetch/queries.js";
+import { etaParser } from "../parser/etaParser.js";
 import styles from "./LiveMap.module.css";
 import RouteOverlay from "./RouteOverlay.js";
 import { SUBWAY_LINES } from "./subwayData.js";
@@ -50,23 +49,33 @@ const ROUTE_TYPES = [
 
 function getVehicleType(routeTag: string): string {
   const num = Number.parseInt(routeTag, 10);
-  if (num >= 301 && num <= 310) return "Blue Night";
-  if (num >= 501 && num <= 515) return "Streetcar";
-  if (num >= 900) return "Express";
-  if (routeTag.startsWith("5")) return "500-series";
+  if (num >= 301 && num <= 310) {
+    return "Blue Night";
+  }
+  if (num >= 501 && num <= 515) {
+    return "Streetcar";
+  }
+  if (num >= 900) {
+    return "Express";
+  }
+  if (routeTag.startsWith("5")) {
+    return "500-series";
+  }
   return "Bus";
 }
 
 function getRouteColor(routeTag: string): string {
   const type = getVehicleType(routeTag);
-  return ROUTE_TYPES.find(rt => rt.id === type)?.color ?? "#0EA5E9";
+  return ROUTE_TYPES.find((rt) => rt.id === type)?.color ?? "#0EA5E9";
 }
 
 const styleCache = new Map<string, Style>();
 function getVehicleStyle(routeTag: string, selected: boolean): Style {
   const key = `${routeTag}-${selected}`;
   const cached = styleCache.get(key);
-  if (cached) return cached;
+  if (cached) {
+    return cached;
+  }
   const color = getRouteColor(routeTag);
   const s = new Style({
     image: new Circle({
@@ -111,7 +120,9 @@ const stopMarkerStyle = new Style({
 const subwayLineStyleCache = new Map<string, Style>();
 function getSubwayLineStyle(color: string): Style {
   const cached = subwayLineStyleCache.get(color);
-  if (cached) return cached;
+  if (cached) {
+    return cached;
+  }
   const s = new Style({
     stroke: new Stroke({ color, width: 4 }),
     zIndex: 3,
@@ -123,7 +134,9 @@ function getSubwayLineStyle(color: string): Style {
 const subwayStationStyleCache = new Map<string, Style>();
 function getSubwayStationStyle(color: string): Style {
   const cached = subwayStationStyleCache.get(color);
-  if (cached) return cached;
+  if (cached) {
+    return cached;
+  }
   const s = new Style({
     image: new Circle({
       radius: 6,
@@ -140,7 +153,7 @@ function getSubwayStationStyle(color: string): Style {
 const subwayFeatures = SUBWAY_LINES.map((line) => ({
   line,
   lineGeom: new LineString(
-    line.stations.map((s) => fromLonLat([s.lon, s.lat])),
+    line.stations.map((s) => fromLonLat([s.lon, s.lat]))
   ),
   stationGeoms: line.stations.map((s) => ({
     station: s,
@@ -251,9 +264,7 @@ function MapToolbar({
                     className={styles.filterDot}
                     style={{ backgroundColor: cfg.bgColor }}
                   />
-                  <span className={styles.filterItemLabel}>
-                    {cfg.label}
-                  </span>
+                  <span className={styles.filterItemLabel}>{cfg.label}</span>
                 </label>
               );
             })}
@@ -281,9 +292,7 @@ function MapToolbar({
                     className={styles.filterDot}
                     style={{ backgroundColor: rt.color }}
                   />
-                  <span className={styles.filterItemLabel}>
-                    {rt.label}
-                  </span>
+                  <span className={styles.filterItemLabel}>{rt.label}</span>
                 </label>
               );
             })}
@@ -304,11 +313,13 @@ function StopInfoPanel({
   onClose: () => void;
 }) {
   const { data: predictionData, isLoading } = useQuery(
-    ttcStopPrediction(Number.parseInt(stopId)),
+    ttcStopPrediction(Number.parseInt(stopId))
   );
 
   const parsed = useMemo(() => {
-    if (!predictionData) return [];
+    if (!predictionData) {
+      return [];
+    }
     return etaParser(predictionData);
   }, [predictionData]);
 
@@ -321,11 +332,7 @@ function StopInfoPanel({
           <div className={styles.stopPanelTitle}>{stopName}</div>
           <div className={styles.stopPanelId}>Stop #{stopId}</div>
         </div>
-        <button
-          type="button"
-          className={styles.closeBtn}
-          onClick={onClose}
-        >
+        <button type="button" className={styles.closeBtn} onClick={onClose}>
           ✕
         </button>
       </div>
@@ -363,8 +370,7 @@ function StopInfoPanel({
               </span>
               <div className={styles.stopRouteInfo}>
                 <span className={styles.stopRouteDir}>
-                  {route.direction ?? ""}{" "}
-                  {route.routeName ?? ""}
+                  {route.direction ?? ""} {route.routeName ?? ""}
                 </span>
                 <span className={styles.stopRouteEtas}>
                   {etas.length > 0 ? nextMins : "No buses"}
@@ -392,7 +398,7 @@ function SubwayStopInfoPanel({
   onClose: () => void;
 }) {
   const { data: predictions, isLoading } = useQuery(
-    ttcSubwayPrediction(stopCode),
+    ttcSubwayPrediction(stopCode)
   );
 
   return (
@@ -400,15 +406,12 @@ function SubwayStopInfoPanel({
       <div className={styles.stopPanelHeader}>
         <div>
           <div className={styles.stopPanelTitle}>
-            {stopName ?? "Subway Station"} {isAccessible && <span title="Accessible Station">♿</span>}
+            {stopName ?? "Subway Station"}{" "}
+            {isAccessible && <span title="Accessible Station">♿</span>}
           </div>
           <div className={styles.stopPanelId}>Station #{stopCode}</div>
         </div>
-        <button
-          type="button"
-          className={styles.closeBtn}
-          onClick={onClose}
-        >
+        <button type="button" className={styles.closeBtn} onClick={onClose}>
           ✕
         </button>
       </div>
@@ -475,10 +478,10 @@ export default function LiveMap() {
   const [searchValue, setSearchValue] = useState("");
   const [routeFilter, setRouteFilter] = useState("");
   const [activeAgencies, setActiveAgencies] = useState<Set<AgencyID>>(
-    () => new Set(ALL_AGENCIES),
+    () => new Set(ALL_AGENCIES)
   );
   const [activeRouteTypes, setActiveRouteTypes] = useState<Set<string>>(
-    () => new Set(ROUTE_TYPES.map(rt => rt.id))
+    () => new Set(ROUTE_TYPES.map((rt) => rt.id))
   );
 
   // Selected stop (for info panel)
@@ -492,7 +495,9 @@ export default function LiveMap() {
   const hasCentered = useRef(false);
 
   useEffect(() => {
-    if (!("geolocation" in navigator)) return;
+    if (!("geolocation" in navigator)) {
+      return;
+    }
     const watchId = navigator.geolocation.watchPosition(
       (pos) => {
         const loc = {
@@ -508,8 +513,8 @@ export default function LiveMap() {
           });
         }
       },
-      () => { },
-      { enableHighAccuracy: true, maximumAge: 10000 },
+      () => {},
+      { enableHighAccuracy: true, maximumAge: 10000 }
     );
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
@@ -519,7 +524,7 @@ export default function LiveMap() {
       userLocation
         ? new Point(fromLonLat([userLocation.lon, userLocation.lat]))
         : null,
-    [userLocation],
+    [userLocation]
   );
 
   // === Stop markers ===
@@ -532,7 +537,7 @@ export default function LiveMap() {
       if (count <= 0) {
         try {
           const resp = await fetch(
-            "https://thomassth.github.io/to-bus-stations/data/ttc/stops.json",
+            "https://thomassth.github.io/to-bus-stations/data/ttc/stops.json"
           );
           const data = await resp.json();
           await addStops(data);
@@ -552,7 +557,9 @@ export default function LiveMap() {
       return;
     }
     const center = view.center;
-    if (!center) return;
+    if (!center) {
+      return;
+    }
     const [cLon, cLat] = toLonLat(center as number[]);
     const range = Math.max(0.005, 0.04 / (currentZoom - 12));
     getStopsWithinRange(cLat, cLon, range).then((stops) => {
@@ -560,10 +567,8 @@ export default function LiveMap() {
         stops.slice(0, 300).map((s: any) => ({
           stopId: s.stopId ?? s.id,
           tag: s.tag ?? "",
-          geometry: new Point(
-            fromLonLat([Number(s.lon), Number(s.lat)]),
-          ),
-        })),
+          geometry: new Point(fromLonLat([Number(s.lon), Number(s.lat)])),
+        }))
       );
     });
   }, [stopsLoaded, currentZoom, view.center]);
@@ -576,8 +581,11 @@ export default function LiveMap() {
   const handleToggleAgency = useCallback((id: AgencyID) => {
     setActiveAgencies((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
   }, []);
@@ -586,15 +594,18 @@ export default function LiveMap() {
     setActiveAgencies((prev) =>
       prev.size === ALL_AGENCIES.length
         ? new Set<AgencyID>()
-        : new Set(ALL_AGENCIES),
+        : new Set(ALL_AGENCIES)
     );
   }, []);
 
   const handleToggleRouteType = useCallback((id: string) => {
     setActiveRouteTypes((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
       return next;
     });
   }, []);
@@ -603,7 +614,7 @@ export default function LiveMap() {
     setActiveRouteTypes((prev) =>
       prev.size === ROUTE_TYPES.length
         ? new Set<string>()
-        : new Set(ROUTE_TYPES.map(rt => rt.id)),
+        : new Set(ROUTE_TYPES.map((rt) => rt.id))
     );
   }, []);
 
@@ -631,25 +642,29 @@ export default function LiveMap() {
 
   // === Computed ===
   const filteredFeatures = useMemo(() => {
-    if (!vehicles) return [];
+    if (!vehicles) {
+      return [];
+    }
     return vehicles
       .filter((v) => {
-        if (!activeAgencies.has("ttc")) return false;
+        if (!activeAgencies.has("ttc")) {
+          return false;
+        }
 
         // Route Type filter
         const type = getVehicleType(v.routeTag);
-        if (!activeRouteTypes.has(type)) return false;
+        if (!activeRouteTypes.has(type)) {
+          return false;
+        }
 
         // If a vehicle is selected, only show vehicles on the same route to reduce clutter
         if (selectedVehicle && v.routeTag !== selectedVehicle.routeTag) {
           return false;
         }
 
-        if (
-          routeFilter &&
-          !v.routeTag.toLowerCase().includes(routeFilter)
-        )
+        if (routeFilter && !v.routeTag.toLowerCase().includes(routeFilter)) {
           return false;
+        }
         return true;
       })
       .map((v) => ({
@@ -712,9 +727,12 @@ export default function LiveMap() {
                     }
                     onClick={(e: any) => {
                       e.stopPropagation?.();
-                      const isAcc = station.isAccessible !== false ? "true" : "false";
+                      const isAcc =
+                        station.isAccessible !== false ? "true" : "false";
                       // Encode extra metadata into the stopId to avoid complex LiveMap state
-                      handleStopSelect(`subway-${station.code}::${station.name}::${line.color}::${isAcc}`);
+                      handleStopSelect(
+                        `subway-${station.code}::${station.name}::${line.color}::${isAcc}`
+                      );
                       return false;
                     }}
                   />
@@ -754,7 +772,7 @@ export default function LiveMap() {
               geometry={geometry}
               style={getVehicleStyle(
                 vehicle.routeTag,
-                selectedVehicle?.id === vehicle.id,
+                selectedVehicle?.id === vehicle.id
               )}
               onClick={(e: any) => {
                 e.stopPropagation?.();
@@ -768,14 +786,10 @@ export default function LiveMap() {
         {/* User location */}
         {userLocationGeom && (
           <RLayerVector zIndex={20}>
-            <RFeature
-              geometry={userLocationGeom}
-              style={userLocationStyle}
-            />
+            <RFeature geometry={userLocationGeom} style={userLocationStyle} />
           </RLayerVector>
         )}
       </RMap>
-
 
       <div className={styles.vehicleCountBadge}>
         {isLoading
@@ -825,7 +839,7 @@ export default function LiveMap() {
       )}
 
       {/* Stop info panel with predictions */}
-      {selectedStopId && selectedStopId.startsWith("subway-") ? (
+      {selectedStopId?.startsWith("subway-") ? (
         <SubwayStopInfoPanel
           stopCode={selectedStopId.split("::")[0].replace("subway-", "")}
           stopName={selectedStopId.split("::")[1]}
@@ -838,9 +852,7 @@ export default function LiveMap() {
       ) : null}
 
       {currentZoom < 14 && stopsLoaded && (
-        <div className={styles.zoomHint}>
-          Zoom in to see transit stops
-        </div>
+        <div className={styles.zoomHint}>Zoom in to see transit stops</div>
       )}
     </div>
   );

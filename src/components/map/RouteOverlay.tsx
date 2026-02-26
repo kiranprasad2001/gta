@@ -19,7 +19,9 @@ interface RouteOverlayProps {
 export default function RouteOverlay({ routeTag }: RouteOverlayProps) {
   const { data: routeData } = useQuery(ttcRouteWithPaths(routeTag));
 
-  if (!routeData) return null;
+  if (!routeData) {
+    return null;
+  }
 
   const lineStyle = new Style({
     stroke: new Stroke({
@@ -34,7 +36,9 @@ export default function RouteOverlay({ routeTag }: RouteOverlayProps) {
       <RLayerVector zIndex={5}>
         {routeData.paths.map((path, pathIdx) => {
           const coords = path.map((p) => fromLonLat([p.lon, p.lat]));
-          if (coords.length < 2) return null;
+          if (coords.length < 2) {
+            return null;
+          }
           return (
             <RFeature
               key={`path-${pathIdx}`}

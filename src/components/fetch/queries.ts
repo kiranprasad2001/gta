@@ -17,11 +17,7 @@ import type {
   SubwayStop,
 } from "../../models/ttc.js";
 import type { UnifiedStop } from "../../models/unified.js";
-import {
-  normalizeGoTransit,
-  normalizeTtc,
-  normalizeTtcSubway,
-} from "./adapters.js";
+import { normalizeGoTransit, normalizeTtc } from "./adapters.js";
 
 export const ttcStopPrediction = (stopId: number) =>
   queryOptions<EtaPredictionJson>({
@@ -411,8 +407,6 @@ export const gtaArrivalsQuery = (stop: UnifiedStop) => {
   switch (stop.agency) {
     case "go":
       return goTransitArrivals(stop.code);
-
-    case "ttc":
     default:
       // For TTC, use the existing stop prediction but normalize to ArrivalPrediction
       return queryOptions<ArrivalPrediction[]>({

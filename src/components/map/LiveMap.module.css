@@ -43,7 +43,7 @@
   pointer-events: none;
 }
 
-.toolbar>* {
+.toolbar > * {
   pointer-events: auto;
 }
 
@@ -503,5 +503,5 @@
 .stopRouteEtas {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #0EA5E9;
+  color: #0ea5e9;
 }
